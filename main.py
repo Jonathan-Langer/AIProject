@@ -3,6 +3,8 @@ import numpy as np
 from Graph import Graph
 from Vertex import Vertex
 
+import Node
+import UninformedSearch
 
 def main():
     # file = "1-2-3-4-5-6-0-7-8"
@@ -31,10 +33,24 @@ def main():
     # newarr = np.array(newarr)
     # newarr = np.hsplit(newarr, 3)
     # newarr = np.asmatrix(newarr)
-    matrix = [[1, 2, 3], [4, 5, 6], [0, 7, 8]]
-    v = Vertex(matrix)
-    g = Graph(v, matrix)
-    print(g.E)
+    #matrix = [[1, 2, 3], [4, 5, 6], [0, 7, 8]]
+    #v = Vertex(matrix)
+    #g = Graph(v, matrix)
+    #print(g.E)
+
+
+    puzzle = [1,2,4,3,0,5,7,6,8]
+    root = Node(puzzle)
+    ui = UninformedSearch()
+
+    solution = ui.BFS(root)
+
+    if len(solution) > 0:
+        for i in range(len(solution)):
+            solution[i].printPuzzle()
+    else:
+        print("No path to solution is found")
+
 
 
 if __name__ == '__main__':
