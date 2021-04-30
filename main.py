@@ -34,7 +34,9 @@ def main():
     matrix = [[1, 2, 3], [4, 5, 6], [0, 7, 8]]
     v = Vertex(matrix)
     g = Graph(v, matrix)
-    print(g.E)
+    graph = g.build_graph(v)
+    for x in range(len(list(graph.V))):
+        print(graph.V[x].mat)
 
 
 if __name__ == '__main__':
