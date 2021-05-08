@@ -15,36 +15,112 @@ class Graph:
         self.vGoalState = Vertex(copy.copy(self.GoalState))
         self.build_graph(v)
 
+    """"
     def build_graph(self, v):
+        queueOfVertex = []
+        queueOfVertex.append(v)
         if self.is_goal_state(v) or self.is_exist(v):
             self.add_v(v)
             return
         else:
             self.add_v(v)
             v.find_zero()
-            if v.is_up():
-                u = Vertex(copy.copy(v.mat))
+            while len(queueOfVertex)!=0:
+                state = queueOfVertex.pop(0)
+                
+                if state.is_up():
+                    u = Vertex(copy.copy(state.mat))
+                    u = u.up()
+                    self.add_edge(state, u)
+                    queueOfVertex.append(u)
+                    u.print()
+                    # self.build_graph(u)
+
+                if state.is_down():
+                    u = Vertex(copy.copy(state.mat))
+                    u = u.down()
+                    self.add_edge(state, u)
+                    queueOfVertex.append(u)
+                    u.print()
+                    # self.build_graph(u)
+
+                if state.is_right():
+                    u = Vertex(copy.copy(state.mat))
+                    u = u.right()
+                    self.add_edge(state, u)
+                    queueOfVertex.append(u)
+                    u.print()
+                    # self.build_graph(u)
+
+                if state.is_left():
+                    u = Vertex(copy.copy(state.mat))
+                    u = u.left()
+                    self.add_edge(state, u)
+                    queueOfVertex.append(u)
+                    u.print()
+                    # self.build_graph(u)
+    """
+    """
+    def build_graph(self, v):
+        queueOfVertex = []
+        queueOfVertex.append(v)
+        if self.is_goal_state(v) or self.is_exist(v):
+            self.add_v(v)
+            return
+
+        self.add_v(v)
+        #v.find_zero()
+        while len(queueOfVertex) != 0:
+            state = queueOfVertex.pop(0)
+            state.find_zero()
+            if state.is_up():
+                u = Vertex(copy.copy(state.mat))
                 u = u.up()
-                self.add_edge(v, u)
-                self.build_graph(u)
+                self.add_edge(state, u)
+                if self.is_goal_state(u): #or self.is_exist(u):
+                    u.print()
+                    break
+                if not self.is_exist(u):
+                    queueOfVertex.append(u)
+                #u.print()
+                # self.build_graph(u)
 
-            if v.is_down():
-                u = Vertex(copy.copy(v.mat))
+            if state.is_down():
+                u = Vertex(copy.copy(state.mat))
                 u = u.down()
-                self.add_edge(v, u)
-                self.build_graph(u)
+                self.add_edge(state, u)
+                if self.is_goal_state(u):
+                    u.print()
+                    break
+                if not self.is_exist(u):
+                    queueOfVertex.append(u)
+                #u.print()
+                # self.build_graph(u)
 
-            if v.is_right():
-                u = Vertex(copy.copy(v.mat))
+            if state.is_right():
+                u = Vertex(copy.copy(state.mat))
                 u = u.right()
-                self.add_edge(v, u)
-                self.build_graph(u)
+                self.add_edge(state, u)
+                if self.is_goal_state(u):
+                    u.print()
+                    break
+                if not self.is_exist(u):
+                    queueOfVertex.append(u)
+                #u.print()
+                # self.build_graph(u)
 
-            if v.is_left():
-                u = Vertex(copy.copy(v.mat))
+            if state.is_left():
+                u = Vertex(copy.copy(state.mat))
                 u = u.left()
-                self.add_edge(v, u)
-                self.build_graph(u)
+                self.add_edge(state, u)
+                if self.is_goal_state(u):
+                    break
+                if not self.is_exist(u):
+                    queueOfVertex.append(u)
+                #u.print()
+                # self.build_graph(u)
+    """
+
 
     def add_edge(self, v, u):
         self.E.append([v, u])

@@ -1,6 +1,6 @@
 import numpy as np
 import copy
-
+"""
 global N #the size of the board
 
 class Node:
@@ -103,3 +103,4 @@ class Node:
     def copyPuzzle(self, a ,b):
         for i in range(len(b)):
             a[i] = b[i]
+"""
