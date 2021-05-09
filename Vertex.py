@@ -1,11 +1,12 @@
 import numpy as np
 import copy
+import datetime as dt
 
 
 class Vertex:
     mat = []
     adj = []
-    GoalState=[1, 2, 3, 4, 5, 6, 7, 8, 0]
+    GoalState = [1, 2, 3, 4, 5, 6, 7, 8, 0]
 
     def __init__(self, mat, parent, direction, depth, cost):
         self.state = mat
@@ -25,49 +26,6 @@ class Vertex:
             return True
         return False
 
-    def up(self):
-        v = Vertex(copy.copy(self.mat))
-        for i in range(len(self.mat)):
-            for j in range(len(self.mat)):
-                if v.mat[i, j] == 0:
-                    self.x=i-1
-                    self.y=j
-                    v.mat[i, j], v.mat[i - 1, j] = v.mat[i - 1, j], v.mat[i, j]
-                    return v
-        return v
-
-    def down(self):
-        v = Vertex(copy.copy(self.mat))
-        for i in range(len(self.mat)):
-            for j in range(len(self.mat)):
-                if v.mat[i, j] == 0:
-                    self.x=i+1
-                    self.y=j
-                    v.mat[i, j], v.mat[i + 1, j] = v.mat[i + 1, j], v.mat[i, j]
-                    return v
-        return v
-
-    def right(self):
-        v = Vertex(copy.copy(self.mat))
-        for i in range(len(self.mat)):
-            for j in range(len(self.mat)):
-                if v.mat[i, j] == 0:
-                    self.x=i
-                    self.y=j+1
-                    v.mat[i, j], v.mat[i, j+1] = v.mat[i, j+1], v.mat[i, j]
-                    return v
-        return v
-
-    def left(self):
-        v = Vertex(copy.copy(self.mat))
-        for i in range(len(self.mat)):
-            for j in range(len(self.mat)):
-                if v.mat[i, j] == 0:
-                    self.x=i
-                    self.y=j-1
-                    v.mat[i, j], v.mat[i, j-1] = v.mat[i, j-1], v.mat[i, j]
-                    return v
-        return v
 
     def find_zero(self):
         self.x = -1
@@ -114,17 +72,30 @@ class Vertex:
         return True
     """
 
+    def up(self, temp, x, n):
+        temp[x], temp[x - n] = temp[x - n], temp[x]
+
+    def down(self, temp, x, n):
+        temp[x], temp[x + n] = temp[x + n], temp[x]
+
+    def left(self, temp, x, n):
+        temp[x], temp[x - 1] = temp[x - 1], temp[x]
+
+    def right(self, temp, x, n):
+        temp[x], temp[x - 1] = temp[x - 1], temp[x]
+
+
     def print(self):
         print(self.state)
 
     def discoverChildren(self, n):
         x = self.state.index(0)
-        moves = self.available_moves(x,n)
+        moves = self.available_moves(x, n)
 
-        children=[]
+        children = []
 
         for direction in moves:
-            temp=self.state.copy()
+            temp = self.state.copy()
             if direction == 'Left':
                 temp[x], temp[x - 1] = temp[x - 1], temp[x]
             elif direction == 'Right':
@@ -135,8 +106,9 @@ class Vertex:
                 temp[x], temp[x + n] = temp[x + n], temp[x]
 
             children.append(
-                Vertex(temp, self, direction, self.depth + 1, 1))  # depth should be changed as children are produced
+                Vertex(temp, self, direction, self.depth + 1,  self.cost + 1))  # depth should be changed as children are produced
         return children
+
         """
         if self.is_up():
             u = Vertex(copy.copy(self.mat), self,'U',self.depth + 1, 1)
@@ -168,7 +140,7 @@ class Vertex:
         """
 
     def solution(self):
-        solution =[]
+        solution = []
         solution.append(self.direction)
         path = self
         while path.pai != None:
@@ -180,7 +152,7 @@ class Vertex:
 
 
     def available_moves(self, x, n):
-        moves = ['Left', 'Right', 'Up', 'Down']
+        moves = ['Up', 'Down', 'Left', 'Right']
         if x % n == 0:
             moves.remove('Left')
         if x % n == n - 1:
@@ -192,9 +164,87 @@ class Vertex:
 
         return moves
 
+    def f(self, n):
+        return self.g() + self.h(n)
+
+    def g(self):
+        return self.cost
+
+    def h(self, n):
+        sum = 0;
+        newmat = np.array(self.state.copy())
+        GS = np.array(self.GoalState.copy())
+        newmat = np.hsplit(newmat, 3)
+        newmat = np.asmatrix(newmat)
+        GS = np.hsplit(GS, 3)
+        GS = np.asmatrix(GS)
+        for x in range(n):
+            for y in range(n):
+                if not newmat[x, y] == 0:
+                    x_val, y_val = x, y;
+                    x_goal, y_goal = self.findVal(GS, newmat[x, y])
+                    sum += (abs(x_val - x_goal)+abs(y_val - y_goal))
+        return sum
+
+    def findVal(self, mat, val):
+        for x in range(len(mat)):
+            for y in range(len(mat)):
+                if mat[x, y] == val:
+                    return x, y;
 
 
 
+
+
+
+
+
+
+
+#def up(self):
+    #     v = Vertex(copy.copy(self.mat))
+    #     for i in range(len(self.mat)):
+    #         for j in range(len(self.mat)):
+    #             if v.mat[i, j] == 0:
+    #                 self.x=i-1
+    #                 self.y=j
+    #                 v.mat[i, j], v.mat[i - 1, j] = v.mat[i - 1, j], v.mat[i, j]
+    #                 return v
+    #     return v
+    #
+    #
+    # def down(self):
+    #     v = Vertex(copy.copy(self.mat))
+    #     for i in range(len(self.mat)):
+    #         for j in range(len(self.mat)):
+    #             if v.mat[i, j] == 0:
+    #                 self.x=i+1
+    #                 self.y=j
+    #                 v.mat[i, j], v.mat[i + 1, j] = v.mat[i + 1, j], v.mat[i, j]
+    #                 return v
+    #     return v
+    #
+    # def right(self):
+    #     v = Vertex(copy.copy(self.mat))
+    #     for i in range(len(self.mat)):
+    #         for j in range(len(self.mat)):
+    #             if v.mat[i, j] == 0:
+    #                 self.x=i
+    #                 self.y=j+1
+    #                 v.mat[i, j], v.mat[i, j+1] = v.mat[i, j+1], v.mat[i, j]
+    #                 return v
+    #     return v
+    #
+    # def left(self):
+    #     v = Vertex(copy.copy(self.mat))
+    #     for i in range(len(self.mat)):
+    #         for j in range(len(self.mat)):
+    #             if v.mat[i, j] == 0:
+    #                 self.x=i
+    #                 self.y=j-1
+    #                 v.mat[i, j], v.mat[i, j-1] = v.mat[i, j-1], v.mat[i, j]
+    #                 return v
+    #     return v
 
 
 
