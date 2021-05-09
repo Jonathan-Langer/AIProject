@@ -1,12 +1,14 @@
 import numpy as np
 import copy
-import datetime as dt
+#import datetime as dt
 
 
 class Vertex:
     mat = []
     adj = []
-    GoalState = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+    #GoalState = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+    AStar_evaluation = None
+    heuristic = None
 
     def __init__(self, mat, parent, direction, depth, cost):
         self.state = mat
@@ -21,8 +23,9 @@ class Vertex:
         else:
             self.cost = cost
 
-    def isGoal(self):
-        if self.state == self.GoalState:
+
+    def isGoal(self, state):
+        if self.state == state:
             return True
         return False
 
@@ -164,19 +167,19 @@ class Vertex:
 
         return moves
 
-    def f(self, n):
-        return self.g() + self.h(n)
+    def f(self, n, GoalState):
+        return self.g() + self.h(n, GoalState)
 
     def g(self):
         return self.cost
 
-    def h(self, n):
+    def h(self, n, GoalState):
         sum = 0;
         newmat = np.array(self.state.copy())
-        GS = np.array(self.GoalState.copy())
-        newmat = np.hsplit(newmat, 3)
+        GS = np.array(GoalState.copy())
+        newmat = np.hsplit(newmat, n)
         newmat = np.asmatrix(newmat)
-        GS = np.hsplit(GS, 3)
+        GS = np.hsplit(GS, n)
         GS = np.asmatrix(GS)
         for x in range(n):
             for y in range(n):
@@ -185,6 +188,13 @@ class Vertex:
                     x_goal, y_goal = self.findVal(GS, newmat[x, y])
                     sum += (abs(x_val - x_goal)+abs(y_val - y_goal))
         return sum
+
+    def generateGoalState(self, n):
+        GoalState = []
+        for x in range(np.power(n, 2)):
+            GoalState.append(x + 1)
+        GoalState[np.power(n, 2) - 1] = 0
+        return GoalState
 
     def findVal(self, mat, val):
         for x in range(len(mat)):
