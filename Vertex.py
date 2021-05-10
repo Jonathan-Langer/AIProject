@@ -2,7 +2,6 @@ import numpy as np
 import copy
 #import datetime as dt
 
-
 class Vertex:
     mat = []
     adj = []
@@ -146,13 +145,12 @@ class Vertex:
         solution = []
         solution.append(self.direction)
         path = self
-        while path.pai != None:
+        while path.pai:
             path = path.pai
             solution.append(path.direction)
         solution = solution[:-1]
         solution.reverse()
         return solution
-
 
     def available_moves(self, x, n):
         moves = ['Up', 'Down', 'Left', 'Right']
@@ -167,16 +165,16 @@ class Vertex:
 
         return moves
 
-    def f(self, n, GoalState):
-        return self.g() + self.h(n, GoalState)
+    def f(self, n):
+        return self.g() + self.h(n)
 
     def g(self):
         return self.cost
 
-    def h(self, n, GoalState):
+    def h(self, n):
         sum = 0;
         newmat = np.array(self.state.copy())
-        GS = np.array(GoalState.copy())
+        GS = np.array(self.generateGoalState(n))
         newmat = np.hsplit(newmat, n)
         newmat = np.asmatrix(newmat)
         GS = np.hsplit(GS, n)
@@ -188,6 +186,9 @@ class Vertex:
                     x_goal, y_goal = self.findVal(GS, newmat[x, y])
                     sum += (abs(x_val - x_goal)+abs(y_val - y_goal))
         return sum
+
+    def __lt__(self, other):
+        return self.f(int(np.sqrt(len(self.state)))) < other.f(int(np.sqrt(len(other.state))))
 
     def generateGoalState(self, n):
         GoalState = []
@@ -202,6 +203,13 @@ class Vertex:
                 if mat[x, y] == val:
                     return x, y;
 
+
+    def generateGoalState(self, n):
+        GoalState = []
+        for x in range(np.power(n, 2)):
+            GoalState.append(x + 1)
+        GoalState[np.power(n, 2) - 1] = 0
+        return GoalState
 
 
 

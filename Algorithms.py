@@ -1,6 +1,6 @@
 
 import numpy as np
-from queue import PriorityQueue
+import heapq
 from Vertex import Vertex
 
 
@@ -36,21 +36,42 @@ def aStar(initialState, n):
     root = Vertex(initialState, None, None, 0, 0)
     if root.isGoal(GoalState):
         return root.solution()
+
     OpenList = []
+    heapq.heappush(OpenList, root) #min heap
     OpenList.append(root)
     CloseList = []
+
     while len(OpenList) > 0:
         curr_node = OpenList.pop(0)
+        children = curr_node.discoverChildren(n)
+
         if curr_node.isGoal(GoalState):
             return curr_node.solution(), len(CloseList)
-        min_node = minV(curr_node.discoverChildren(n), n, GoalState)  # returns the node with the min f(n) from curr_node children
+
+        #min_node = minV(curr_node.discoverChildren(n), n, GoalState)  # returns the node with the min f(n) from curr_node children
+        for node in children:
+            if node.isGoal(GoalState):
+                return node.solution(), len(CloseList)
+            if node.state not in CloseList and not isExist(OpenList, node):
+                heapq.heappush(OpenList, node)
         CloseList.append(curr_node.state)
-        if min_node.state not in CloseList:
-            if min_node.isGoal(GoalState):
-                return min_node.solution(), len(CloseList)
-            else:
-                OpenList.append(min_node)
     return
+
+# A star  isExist() is a help func checks if node exist in open list and if it does,
+# update the g() value (cost from root value) if it is necessary
+def isExist(openlist, v):
+    if len(openlist) == 0:
+        return False
+    flag = False
+    for i, node in enumerate(openlist):
+        if v == node:
+            if v.g() < openlist[i].g():
+                openlist[i].cost = v.g() + 1
+                openlist[i].pai = v
+                flag = True
+    return flag
+
 
 
 
