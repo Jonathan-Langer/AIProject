@@ -1,6 +1,7 @@
 
 import numpy as np
 import heapq
+from queue import LifoQueue
 from Vertex import Vertex
 
 
@@ -31,6 +32,59 @@ def BFS(initialState, n):
     return
 
 
+
+
+
+def IDS(initialState, n):
+    GoalState = generateGoalState(n)
+    root = Vertex(initialState, None, None, 0, 0)
+    OpenList=[]
+    CloseList=[]
+    depth = 0
+    while(True):
+        cur=root
+        OpenList.append(cur)
+        while(len(OpenList)!=0):
+            cur=OpenList[0]
+            if cur.isGoal(GoalState):
+                cur.solution()
+                return
+            elif depth > cur.depth:
+                cur.discoverChildren(n)
+            else:
+                OpenList.pop(0)
+        OpenList.clear()
+        CloseList.clear()
+        depth=depth+1
+
+def deepthLimited(start,GoalState,depth,n):
+    leaves = []
+    leaves.append(start)
+    while True:
+        if len(leaves)==0:
+            return None
+        actual = leaves.pop(0)
+        if actual.isGoal(GoalState):
+            return actual.solution(), len(leaves)
+        elif actual.depth is not depth:
+                succ = actual.discoverChildren(n)
+                leaves.extend(succ)
+
+
+def IterativDeeping(initialState, n):
+    GoalState=generateGoalState(n)
+    root = Vertex(initialState, None, None, 0, 0)
+
+    depth=0
+    result=None
+    while result == None:
+        result = deepthLimited(root,GoalState,depth,n)
+        depth+=1
+    return result
+
+
+
+
 def aStar(initialState, n):
     GoalState = generateGoalState(n)
     root = Vertex(initialState, None, None, 0, 0)
@@ -39,6 +93,7 @@ def aStar(initialState, n):
 
     OpenList = []
     heapq.heappush(OpenList, root) #min heap
+    heapq.heapify(OpenList)
     OpenList.append(root)
     CloseList = []
 

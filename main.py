@@ -4,6 +4,8 @@ from Graph import Graph
 from Vertex import Vertex
 from Algorithms import BFS
 from Algorithms import aStar
+from Algorithms import IDS
+from Algorithms import IterativDeeping
 
 
 def solvable(board):
@@ -51,26 +53,46 @@ def main():
     list = [1, 8, 2, 0, 4, 3, 7, 6, 5]
     list2 = [1, 2, 3, 4, 5, 6, 0, 7, 8]
 
-    f = open("input.txt", "r")
-    typeOfAlgorithm = int(f.readline())
-    boardSize = int(f.readline())
-    initialState = f.readline()
+    inputFile = open("input.txt", "r")
+    typeOfAlgorithm = int(inputFile.readline())
+    boardSize = int(inputFile.readline())
+    initialState = inputFile.readline()
     initialState = initialState.split("-")
     for x in range(len(initialState)):
         initialState[x] = int(initialState[x])
 
-    if solvable(initialState) == False:
-        print("The puzzle isn't solvable")
-    else:
-        BFS_Solution = BFS(initialState, boardSize)
-        #BFS_Solution = BFS(list, 3)
-        print("BFS Solution is: ", BFS_Solution[0])
-        print("Number of explored nodes is: ", BFS_Solution[1])
-        # print(g.E)
+    inputFile.close()
 
-        aStar_solution = aStar(initialState, boardSize)
-        print("AStar solution is", aStar_solution[0])
-        print("Number of explored nodes is: ", aStar_solution[1])
+    outputFile = open("output.txt","w")
+
+    if solvable(initialState) == False:
+        outputFile.write("The puzzle isn't solvable")
+    else:
+        if typeOfAlgorithm == 1:
+            Solution = IterativDeeping(initialState, boardSize)
+
+            outputFile.write("IDS Solution is: " + str(Solution[0]) + '\n')
+            outputFile.write("Number of explored nodes is: " + str(Solution[1]))
+
+            #print("IDS Solution is: ", Solution[0])
+            #print("Number of explored nodes is: ", Solution[1])
+
+        elif typeOfAlgorithm == 2:
+            Solution = BFS(initialState, boardSize)
+
+            outputFile.write("BFS Solution is: " + str(Solution[0]) + '\n')
+            outputFile.write("Number of explored nodes is: " + str(Solution[1]))
+
+            #print("BFS Solution is: ", Solution[0])
+            #print("Number of explored nodes is: ", Solution[1])
+        else:
+            Solution = aStar(initialState, boardSize)
+
+            outputFile.write("A* Solution is: " + str(Solution[0]) + '\n')
+            outputFile.write("Number of explored nodes is: " + str(Solution[1]))
+
+            #print("AStar solution is", Solution[0])
+            #print("Number of explored nodes is: ", Solution[1])
 
 
 if __name__ == '__main__':

@@ -188,7 +188,15 @@ class Vertex:
         return sum
 
     def __lt__(self, other):
-        return self.f(int(np.sqrt(len(self.state)))) < other.f(int(np.sqrt(len(other.state))))
+        if self.f(int(np.sqrt(len(self.state)))) == other.f(int(np.sqrt(len(other.state)))):
+            if(self.direction!=None) and (other.direction!=None):
+                if len(self.direction) == len(other.direction):
+                    return self.direction < other.direction
+                else:
+                    return len(self.direction) < len(other.direction)
+            else:
+                return self.f(int(np.sqrt(len(self.state)))) < other.f(int(np.sqrt(len(other.state))))
+
 
     def generateGoalState(self, n):
         GoalState = []
