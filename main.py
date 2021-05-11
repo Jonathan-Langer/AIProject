@@ -4,7 +4,6 @@ from Graph import Graph
 from Vertex import Vertex
 from Algorithms import BFS
 from Algorithms import aStar
-from Algorithms import IDS
 from Algorithms import IterativDeeping
 
 
@@ -93,6 +92,8 @@ def main():
 
             #print("AStar solution is", Solution[0])
             #print("Number of explored nodes is: ", Solution[1])
+
+    print("Finished Calculating...please check the answer in the output.txt file")
 
 
 if __name__ == '__main__':

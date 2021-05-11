@@ -34,7 +34,7 @@ def BFS(initialState, n):
 
 
 
-
+"""
 def IDS(initialState, n):
     GoalState = generateGoalState(n)
     root = Vertex(initialState, None, None, 0, 0)
@@ -57,18 +57,7 @@ def IDS(initialState, n):
         CloseList.clear()
         depth=depth+1
 
-def deepthLimited(start,GoalState,depth,n):
-    leaves = []
-    leaves.append(start)
-    while True:
-        if len(leaves)==0:
-            return None
-        actual = leaves.pop(0)
-        if actual.isGoal(GoalState):
-            return actual.solution(), len(leaves)
-        elif actual.depth is not depth:
-                succ = actual.discoverChildren(n)
-                leaves.extend(succ)
+"""
 
 
 def IterativDeeping(initialState, n):
@@ -81,6 +70,20 @@ def IterativDeeping(initialState, n):
         result = deepthLimited(root,GoalState,depth,n)
         depth+=1
     return result
+
+
+def deepthLimited(start,GoalState,depth,n):
+    leaves = []
+    leaves.append(start)
+    while True:
+        if len(leaves)==0:
+            return None
+        actual = leaves.pop(0)
+        if actual.isGoal(GoalState):
+            return actual.solution(), len(leaves)
+        elif actual.depth is not depth:
+                succ = actual.discoverChildren(n)
+                leaves.extend(succ)
 
 
 
