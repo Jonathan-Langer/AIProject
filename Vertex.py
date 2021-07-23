@@ -65,14 +65,6 @@ class Vertex:
         else:
             return False
 
-    """
-    def __eq__(self, v2):
-        for x in range(len(self.mat)):
-            for y in range(len(self.mat)):
-                if self.mat[x, y] != v2.mat[x, y]:
-                    return False
-        return True
-    """
 
     def up(self, temp, x, n):
         temp[x], temp[x - n] = temp[x - n], temp[x]
@@ -98,48 +90,19 @@ class Vertex:
 
         for direction in moves:
             temp = self.state.copy()
-            if direction == 'Left':
+            if direction == 'Right':
                 temp[x], temp[x - 1] = temp[x - 1], temp[x]
-            elif direction == 'Right':
+            elif direction == 'Left':
                 temp[x], temp[x + 1] = temp[x + 1], temp[x]
-            elif direction == 'Up':
-                temp[x], temp[x - n] = temp[x - n], temp[x]
             elif direction == 'Down':
+                temp[x], temp[x - n] = temp[x - n], temp[x]
+            elif direction == 'Up':
                 temp[x], temp[x + n] = temp[x + n], temp[x]
 
             children.append(
                 Vertex(temp, self, direction, self.depth + 1,  self.cost + 1))  # depth should be changed as children are produced
         return children
 
-        """
-        if self.is_up():
-            u = Vertex(copy.copy(self.mat), self,'U',self.depth + 1, 1)
-            u = u.up()
-            children.append(u)
-        else:
-            moves.remove('U')
-
-        if self.is_down():
-            u = Vertex(copy.copy(self.mat), self, 'D', self.depth + 1, 1)
-            u = u.down()
-            children.append(u)
-        else:
-            moves.remove('D')
-
-        if self.is_right():
-            u = Vertex(copy.copy(self.mat), self, 'R', self.depth + 1, 1)
-            u = u.right()
-            children.append(u)
-        else:
-            moves.remove('R')
-
-        if self.is_left():
-            u = Vertex(copy.copy(self.mat), self, 'L', self.depth + 1, 1)
-            u = u.left()
-            children.append(u)
-        else:
-            moves.remove('L')
-        """
 
     def solution(self):
         solution = []
@@ -155,13 +118,13 @@ class Vertex:
     def available_moves(self, x, n):
         moves = ['Up', 'Down', 'Left', 'Right']
         if x % n == 0:
-            moves.remove('Left')
-        if x % n == n - 1:
             moves.remove('Right')
+        if x % n == n - 1:
+            moves.remove('Left')
         if x - n < 0:
-            moves.remove('Up')
-        if x + n > n * n - 1:
             moves.remove('Down')
+        if x + n > n * n - 1:
+            moves.remove('Up')
 
         return moves
 

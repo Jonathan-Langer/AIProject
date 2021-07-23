@@ -5,6 +5,7 @@ from queue import LifoQueue
 from Vertex import Vertex
 
 
+#THE FIRST ALGORITHM IS: BFS
 def BFS(initialState, n):
     GoalState = generateGoalState(n)
     root = Vertex(initialState, None, None, 0, 0)
@@ -32,62 +33,35 @@ def BFS(initialState, n):
     return
 
 
-
-
-"""
+#THE SECOND ALGORITHM: IDS - ITERATIVE DEPTH SEARCH
 def IDS(initialState, n):
-    GoalState = generateGoalState(n)
-    root = Vertex(initialState, None, None, 0, 0)
-    OpenList=[]
-    CloseList=[]
-    depth = 0
-    while(True):
-        cur=root
-        OpenList.append(cur)
-        while(len(OpenList)!=0):
-            cur=OpenList[0]
-            if cur.isGoal(GoalState):
-                cur.solution()
-                return
-            elif depth > cur.depth:
-                cur.discoverChildren(n)
-            else:
-                OpenList.pop(0)
-        OpenList.clear()
-        CloseList.clear()
-        depth=depth+1
-
-"""
-
-
-def IterativDeeping(initialState, n):
     GoalState=generateGoalState(n)
     root = Vertex(initialState, None, None, 0, 0)
 
     depth=0
     result=None
-    while result == None:
-        result = deepthLimited(root,GoalState,depth,n)
+    while result == None: #While you didn't find the solution increase the depth in 1
+        result = deepthLimitedDFS(root,GoalState,depth,n)
         depth+=1
     return result
 
-
-def deepthLimited(start,GoalState,depth,n):
-    leaves = []
-    leaves.append(start)
+#HELP FUNCTION
+def deepthLimitedDFS(start,GoalState,depth,n):
+    openList = []
+    openList.append(start)
     while True:
-        if len(leaves)==0:
+        if len(openList)==0:
             return None
-        actual = leaves.pop(0)
+        actual = openList.pop(0)
         if actual.isGoal(GoalState):
-            return actual.solution(), len(leaves)
+            return actual.solution(), len(openList)
         elif actual.depth is not depth:
                 succ = actual.discoverChildren(n)
-                leaves.extend(succ)
+                openList.extend(succ)
 
 
 
-
+#THE THIRD ALGORITHM IS: A*
 def aStar(initialState, n):
     GoalState = generateGoalState(n)
     root = Vertex(initialState, None, None, 0, 0)
@@ -116,8 +90,8 @@ def aStar(initialState, n):
         CloseList.append(curr_node.state)
     return
 
-# A star  isExist() is a help func checks if node exist in open list and if it does,
-# update the g() value (cost from root value) if it is necessary
+#isExist() is a help func that checks if node exist in open list and if it does,
+#update the g() value (cost from root value) if it is necessary
 def isExist(openlist, v):
     if len(openlist) == 0:
         return False
@@ -138,22 +112,11 @@ def minV(openlist, n, GoalState):
     return openlist[0]
 
 
+
+
 def generateGoalState(n):
     GoalState=[]
     for x in range(np.power(n, 2)):
         GoalState.append(x + 1)
     GoalState[np.power(n, 2) - 1] = 0
     return GoalState
-
-
-
-
-
-
-
-#  minNode = openlist[0];
- # for v in openlist:
-    #     if minNode.f(n) > v.f(n):
-    #         minNode = v
-""" if minNode.f(n) == v.f(n):
-    if minNode.direction == "Up" """
