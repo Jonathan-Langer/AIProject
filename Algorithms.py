@@ -1,3 +1,4 @@
+import sys
 
 import numpy as np
 import heapq
@@ -98,47 +99,55 @@ def aStar(initialState, n):
         return root.solution()
 
     OpenList = []
-    heapq.heappush(OpenList, root) #min heap
-    heapq.heapify(OpenList)
     OpenList.append(root)
     CloseList = []
 
     while len(OpenList) > 0:
-        curr_node = OpenList.pop(0)
-        children = curr_node.discoverChildren(n)
-
+        result = minHeuristic(OpenList)
+        curr_node = result[0]
         if curr_node.isGoal(GoalState):
             return curr_node.solution(), len(CloseList)
+        OpenList.pop(result[1])
+        CloseList.append(curr_node)
 
-        #min_node = minV(curr_node.discoverChildren(n), n, GoalState)  # returns the node with the min f(n) from curr_node children
+        children = curr_node.discoverChildren(n)
+
         for node in children:
-            if node.isGoal(GoalState):
-                return node.solution(), len(CloseList)
-            if node.state not in CloseList and not isExist(OpenList, node):
-                heapq.heappush(OpenList, node)
-                heapq.heapify(OpenList)
-        CloseList.append(curr_node.state)
-    return
+            if node not in CloseList:
+                newPotentialCost = curr_node.cost + 1
+            if not isExist(OpenList, node, newPotentialCost, n):
+                node.cost = newPotentialCost
+                node.heuristic = heuristicFunc(node, n)
+                node.pai = curr_node
+                OpenList.append(node)
+    return None
 
 #isExist() is a help func that checks if node exist in open list and if it does,
 #update the g() value (cost from root value) if it is necessary
-def isExist(openlist, v):
+def isExist(openlist, v, newPotentialCost, n):
     if len(openlist) == 0:
         return False
     flag = False
     for i, node in enumerate(openlist):
         if v == node:
-            if v.g() < openlist[i].g():
-                openlist[i].cost = v.g() + 1
+            if newPotentialCost < openlist[i].cost:
+                openlist[i].cost = newPotentialCost
+                openlist[i].heuristic = heuristicFunc(openlist[i], n)
                 openlist[i].pai = v
                 flag = True
     return flag
 
 
 
-def minV(openlist, n, GoalState):
-    openlist.sort(reverse=False, key=lambda v: (v.f(n, GoalState), len(v.direction))) #  Returns the node with the less f(n) and then Up, Down, Left, Right
-    return openlist[0]
+def minHeuristic(openlist):
+    minH = sys.maxsize
+    indexOfMinNode = 0
+    for i, node in enumerate(openlist):
+        if node.heuristic < minH:
+            minH = node.heuristic
+            indexOfMinNode = i
+    result = [openlist[indexOfMinNode],indexOfMinNode]
+    return result
 
 
 def generateGoalState(n):
@@ -147,3 +156,6 @@ def generateGoalState(n):
         GoalState.append(x + 1)
     GoalState[np.power(n, 2) - 1] = 0
     return GoalState
+
+def heuristicFunc(node, n):
+    return node.g() + node.h(n)

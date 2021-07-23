@@ -30,6 +30,10 @@ def main():
         print("No valid solution")
         return
 
+    if len(initialState) != np.power(boardSize,2):
+        print("The size of the board that you entered in the second line doesn't match the size of the initial state you entered in the third line"
+              + '\n' + "Please check again your input")
+        quit()
 
 
     if typeOfAlgorithm == 1:

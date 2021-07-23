@@ -7,7 +7,6 @@ class Vertex:
     adj = []
     #GoalState = [1, 2, 3, 4, 5, 6, 7, 8, 0]
     AStar_evaluation = None
-    heuristic = None
 
     def __init__(self, mat, parent, direction, depth, cost):
         self.state = mat
@@ -16,7 +15,7 @@ class Vertex:
         self.pai = parent
         self.direction = direction
         self.depth = depth
-
+        self.heuristic = 0
         if parent:
             self.cost = parent.cost + cost
         else:
