@@ -1,3 +1,4 @@
+import numpy
 import numpy as np
 
 from Graph import Graph
@@ -5,6 +6,7 @@ from Vertex import Vertex
 from Algorithms import BFS
 from Algorithms import aStar
 from Algorithms import IDS
+from Algorithms import checkInput
 
 
 def main():
@@ -23,6 +25,12 @@ def main():
     inputFile.close()
 
     outputFile = open("output.txt","w")
+
+    if checkInput(initialState, numpy.power(boardSize, 2)) % 2 == 1:
+        print("No valid solution")
+        return
+
+
 
     if typeOfAlgorithm == 1:
             Solution = IDS(initialState, boardSize)

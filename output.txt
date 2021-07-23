@@ -1,2 +1,0 @@
-A* Solution is: ['Down', 'Right', 'Up', 'Left']
-Number of explored nodes is: 15

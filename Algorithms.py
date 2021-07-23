@@ -5,12 +5,41 @@ from queue import LifoQueue
 from Vertex import Vertex
 
 
+def checkInput(arr, n):
+    counter = 0
+    num = 0
+    i = 0
+    while i < n:
+        if arr[i] == 0:
+            if i < 4:
+                counter += 1
+            elif i < 8:
+                counter += 2
+            elif i < 12:
+                counter += 3
+            elif i < 16:
+                counter += 4
+            if i == n -1:
+                return counter
+            i = i + 1
+        num = arr[i]
+        j = i
+        while j < n:
+            if arr[j] < num and arr[j] != 0:
+                counter = counter + 1
+            j += 1
+        i += 1
+    return  counter
+
+
+
 #THE FIRST ALGORITHM IS: BFS
 def BFS(initialState, n):
     GoalState = generateGoalState(n)
     root = Vertex(initialState, None, None, 0, 0)
     if root.isGoal(GoalState):
         return root.solution()
+
     OpenList = []
     OpenList.append(root)
     CloseList = []
@@ -19,7 +48,7 @@ def BFS(initialState, n):
         current_node = OpenList.pop(0)
         CloseList.append(current_node.state)
 
-        children = current_node.discoverChildren(n)
+        children = current_node.discoverChildren(n) #discover children set the children pay to curr node
 
         for child in children:
             if child.state in CloseList or child in OpenList:
@@ -41,8 +70,8 @@ def IDS(initialState, n):
     depth=0
     result=None
     while result == None: #While you didn't find the solution increase the depth in 1
-        result = deepthLimitedDFS(root,GoalState,depth,n)
-        depth+=1
+        result = deepthLimitedDFS(root, GoalState, depth, n)
+        depth += 1
     return result
 
 #HELP FUNCTION
@@ -50,7 +79,7 @@ def deepthLimitedDFS(start,GoalState,depth,n):
     openList = []
     openList.append(start)
     while True:
-        if len(openList)==0:
+        if len(openList) == 0:
             return None
         actual = openList.pop(0)
         if actual.isGoal(GoalState):
@@ -87,6 +116,7 @@ def aStar(initialState, n):
                 return node.solution(), len(CloseList)
             if node.state not in CloseList and not isExist(OpenList, node):
                 heapq.heappush(OpenList, node)
+                heapq.heapify(OpenList)
         CloseList.append(curr_node.state)
     return
 
@@ -106,12 +136,9 @@ def isExist(openlist, v):
 
 
 
-
 def minV(openlist, n, GoalState):
     openlist.sort(reverse=False, key=lambda v: (v.f(n, GoalState), len(v.direction))) #  Returns the node with the less f(n) and then Up, Down, Left, Right
     return openlist[0]
-
-
 
 
 def generateGoalState(n):
