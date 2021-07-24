@@ -23,10 +23,16 @@ def main():
         initialState[x] = int(initialState[x])
 
     inputFile.close()
+    validInputFlag = False
+    outputFile = open("output.txt", "w")
+    if boardSize % 2 == 0:
+        if checkInput(initialState, numpy.power(boardSize, 2)) % 2 == 1:
+            validInputFlag = True
+    elif boardSize % 2 == 1:
+        if checkInput(initialState, numpy.power(boardSize, 2)) % 2 == 0:
+            validInputFlag = True
 
-    outputFile = open("output.txt","w")
-
-    if checkInput(initialState, numpy.power(boardSize, 2)) % 2 == 1:
+    if validInputFlag:
         print("No valid solution")
         return
 
