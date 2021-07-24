@@ -1,8 +1,6 @@
 import numpy
 import numpy as np
 
-from Graph import Graph
-from Vertex import Vertex
 from Algorithms import BFS
 from Algorithms import aStar
 from Algorithms import IDS
@@ -10,9 +8,6 @@ from Algorithms import checkInput
 
 
 def main():
-
-    list = [1, 8, 2, 0, 4, 3, 7, 6, 5]
-    list2 = [1, 2, 3, 4, 5, 6, 0, 7, 8]
 
     inputFile = open("input.txt", "r")
     typeOfAlgorithm = int(inputFile.readline())
@@ -23,6 +18,13 @@ def main():
         initialState[x] = int(initialState[x])
 
     inputFile.close()
+
+    if len(initialState) != np.power(boardSize,2):
+        print("The size of the board that you entered in the second line doesn't match the size of the initial state you entered in the third line"
+              + '\n' + "Please check again your input")
+        quit()
+
+
     validInputFlag = False
     outputFile = open("output.txt", "w")
     if boardSize % 2 == 0:
@@ -32,14 +34,10 @@ def main():
         if checkInput(initialState, numpy.power(boardSize, 2)) % 2 == 0:
             validInputFlag = True
 
-    if validInputFlag:
+    """if validInputFlag:
         print("No valid solution")
-        return
+        return"""
 
-    if len(initialState) != np.power(boardSize,2):
-        print("The size of the board that you entered in the second line doesn't match the size of the initial state you entered in the third line"
-              + '\n' + "Please check again your input")
-        quit()
 
 
     if typeOfAlgorithm == 1:

@@ -1,2 +1,2 @@
-A* Solution is: ['Right', 'Up', 'Up', 'Left', 'Left', 'Up']
-Number of explored nodes is: 6
+IDS Solution is: ['Right', 'Down', 'Left', 'Up', 'Left', 'Up']
+Number of explored nodes is: 113

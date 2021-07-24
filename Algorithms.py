@@ -1,8 +1,6 @@
 import sys
 
 import numpy as np
-import heapq
-from queue import LifoQueue
 from Vertex import Vertex
 
 
@@ -34,7 +32,7 @@ def checkInput(arr, n):
 
 
 
-#THE FIRST ALGORITHM IS: BFS
+#The first search algorithm is: BFS - Breath First Search
 def BFS(initialState, n):
     GoalState = generateGoalState(n)
     root = Vertex(initialState, None, None, 0, 0)
@@ -63,35 +61,36 @@ def BFS(initialState, n):
     return
 
 
-#THE SECOND ALGORITHM: IDS - ITERATIVE DEPTH SEARCH
+
+#The second search algorithm is: IDS - Iterative Depth Search
 def IDS(initialState, n):
     GoalState=generateGoalState(n)
     root = Vertex(initialState, None, None, 0, 0)
 
     depth=0
     result=None
-    while result == None: #While you didn't find the solution increase the depth in 1
+    while result == None: #While we didn't find the solution, we will increase the depth in 1
         result = deepthLimitedDFS(root, GoalState, depth, n)
         depth += 1
     return result
 
-#HELP FUNCTION
+#HELP FUNCTION - This function is implementing the DFS search algorithm but runs until specific depth
 def deepthLimitedDFS(start,GoalState,depth,n):
     openList = []
     openList.append(start)
     while True:
         if len(openList) == 0:
             return None
-        actual = openList.pop(0)
-        if actual.isGoal(GoalState):
-            return actual.solution(), len(openList)
-        elif actual.depth is not depth:
-                succ = actual.discoverChildren(n)
-                openList.extend(succ)
+        curr_node = openList.pop(0)
+        if curr_node.isGoal(GoalState):
+            return curr_node.solution(), len(openList)
+        elif curr_node.depth is not depth:
+                children = curr_node.discoverChildren(n)
+                openList.extend(children)
 
 
 
-#THE THIRD ALGORITHM IS: A*
+#The third search algorithm is: A* - using the Manhattan distance as the heuristic function.
 def aStar(initialState, n):
     GoalState = generateGoalState(n)
     root = Vertex(initialState, None, None, 0, 0)
@@ -122,8 +121,9 @@ def aStar(initialState, n):
                 OpenList.append(node)
     return None
 
-#isExist() is a help func that checks if node exist in open list and if it does,
-#update the g() value (cost from root value) if it is necessary
+#isExist() is a help function that checks if node exist in the openlist and if it does,
+#updates the cost (the cost of the route from the root) if it is necessary, i.e if the new cost of the route (from the root)
+#is lower that the cost thar is written in the OpenList
 def isExist(openlist, v, newPotentialCost, n):
     if len(openlist) == 0:
         return False
@@ -138,7 +138,7 @@ def isExist(openlist, v, newPotentialCost, n):
     return flag
 
 
-
+#minHeuristic() is a help function that returnes a list wich includes the node and his index which has the lowest heuristic from the nodes in the OpenList
 def minHeuristic(openlist):
     minH = sys.maxsize
     indexOfMinNode = 0
@@ -149,7 +149,7 @@ def minHeuristic(openlist):
     result = [openlist[indexOfMinNode],indexOfMinNode]
     return result
 
-
+#Function that generates the goalState according to n(one dimansion fron the size of the board)
 def generateGoalState(n):
     GoalState=[]
     for x in range(np.power(n, 2)):
@@ -157,5 +157,8 @@ def generateGoalState(n):
     GoalState[np.power(n, 2) - 1] = 0
     return GoalState
 
+#Function that calculates the total heuristic value of a given node
+#node.g() returnes the cost of the route from the root to the current node
+#node.h(n) returnes the Manhattan Distance from the state of the current node (that is invoking the function) and the goal state.
 def heuristicFunc(node, n):
     return node.g() + node.h(n)

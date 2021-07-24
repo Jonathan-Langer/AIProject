@@ -1,17 +1,11 @@
 import numpy as np
-import copy
-#import datetime as dt
 
 class Vertex:
     mat = []
     adj = []
-    #GoalState = [1, 2, 3, 4, 5, 6, 7, 8, 0]
-    AStar_evaluation = None
 
     def __init__(self, mat, parent, direction, depth, cost):
         self.state = mat
-        #self.mat = np.asmatrix(self.mat)
-        #self.find_zero()
         self.pai = parent
         self.direction = direction
         self.depth = depth
@@ -99,7 +93,7 @@ class Vertex:
                 temp[x], temp[x + n] = temp[x + n], temp[x]
 
             children.append(
-                Vertex(temp, self, direction, self.depth + 1,  self.cost + 1))  # depth should be changed as children are produced
+                Vertex(temp, self, direction, self.depth + 1,  self.cost + 1))  # depth and cost should be changed as children are produced
         return children
 
 
@@ -181,58 +175,6 @@ class Vertex:
         GoalState[np.power(n, 2) - 1] = 0
         return GoalState
 
-
-
-
-
-
-
-
-
-#def up(self):
-    #     v = Vertex(copy.copy(self.mat))
-    #     for i in range(len(self.mat)):
-    #         for j in range(len(self.mat)):
-    #             if v.mat[i, j] == 0:
-    #                 self.x=i-1
-    #                 self.y=j
-    #                 v.mat[i, j], v.mat[i - 1, j] = v.mat[i - 1, j], v.mat[i, j]
-    #                 return v
-    #     return v
-    #
-    #
-    # def down(self):
-    #     v = Vertex(copy.copy(self.mat))
-    #     for i in range(len(self.mat)):
-    #         for j in range(len(self.mat)):
-    #             if v.mat[i, j] == 0:
-    #                 self.x=i+1
-    #                 self.y=j
-    #                 v.mat[i, j], v.mat[i + 1, j] = v.mat[i + 1, j], v.mat[i, j]
-    #                 return v
-    #     return v
-    #
-    # def right(self):
-    #     v = Vertex(copy.copy(self.mat))
-    #     for i in range(len(self.mat)):
-    #         for j in range(len(self.mat)):
-    #             if v.mat[i, j] == 0:
-    #                 self.x=i
-    #                 self.y=j+1
-    #                 v.mat[i, j], v.mat[i, j+1] = v.mat[i, j+1], v.mat[i, j]
-    #                 return v
-    #     return v
-    #
-    # def left(self):
-    #     v = Vertex(copy.copy(self.mat))
-    #     for i in range(len(self.mat)):
-    #         for j in range(len(self.mat)):
-    #             if v.mat[i, j] == 0:
-    #                 self.x=i
-    #                 self.y=j-1
-    #                 v.mat[i, j], v.mat[i, j-1] = v.mat[i, j-1], v.mat[i, j]
-    #                 return v
-    #     return v
 
 
 
