@@ -127,7 +127,7 @@ class Vertex:
     def g(self):
         return self.cost
 
-    def h(self, n):
+    def h(self, n): #The heuristic function according to Manhattan Distance
         sum = 0;
         newmat = np.array(self.state.copy())
         GS = np.array(self.generateGoalState(n))
@@ -166,14 +166,6 @@ class Vertex:
             for y in range(len(mat)):
                 if mat[x, y] == val:
                     return x, y;
-
-
-    def generateGoalState(self, n):
-        GoalState = []
-        for x in range(np.power(n, 2)):
-            GoalState.append(x + 1)
-        GoalState[np.power(n, 2) - 1] = 0
-        return GoalState
 
 
 

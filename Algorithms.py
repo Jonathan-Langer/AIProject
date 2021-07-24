@@ -4,48 +4,6 @@ import numpy as np
 from Vertex import Vertex
 
 
-def checkInput(arr, n):
-    counter = 0
-    num = 0
-    i = 0
-    while i < n:
-        if arr[i] == 0:
-            if i < 4:
-                counter += 1
-            elif i < 8:
-                counter += 2
-            elif i < 12:
-                counter += 3
-            elif i < 16:
-                counter += 4
-            if i == n -1:
-                return counter
-            i = i + 1
-        num = arr[i]
-        j = i
-        while j < n:
-            if arr[j] < num and arr[j] != 0:
-                counter = counter + 1
-            j += 1
-        i += 1
-    return  counter
-
-def isSolvable(arr, n):
-    inversion = 0
-    i = 0
-    j = i + 1
-    while i < n - 1:
-        j = i + 1
-        while j < n - 1:
-            if arr[i] > arr[j]:
-                inversion+=1
-            j+=1
-        if arr[i] == 0 and i % 2 == 1:
-            inversion+=1
-        i+=1
-    return (inversion % 2) == 0
-
-
 #The first search algorithm is: BFS - Breath First Search
 def BFS(initialState, n):
     GoalState = generateGoalState(n)
@@ -59,9 +17,9 @@ def BFS(initialState, n):
 
     while not (len(OpenList) == 0):
         current_node = OpenList.pop(0)
-        CloseList.append(current_node.state)
+        CloseList.append(current_node.state) #the CloseList is list of states (matrix) the represents the board state of the current node
 
-        children = current_node.discoverChildren(n) #discover children set the children pay to curr node
+        children = current_node.discoverChildren(n) #discoverChildren returnes a list of all the children of the current node
 
         for child in children:
             if child.state in CloseList or child in OpenList:
