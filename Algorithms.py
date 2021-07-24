@@ -30,6 +30,20 @@ def checkInput(arr, n):
         i += 1
     return  counter
 
+def isSolvable(arr, n):
+    inversion = 0
+    i = 0
+    j = i + 1
+    while i < n - 1:
+        j = i + 1
+        while j < n - 1:
+            if arr[i] > arr[j]:
+                inversion+=1
+            j+=1
+        if arr[i] == 0 and i % 2 == 1:
+            inversion+=1
+        i+=1
+    return (inversion % 2) == 0
 
 
 #The first search algorithm is: BFS - Breath First Search
