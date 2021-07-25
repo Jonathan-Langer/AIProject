@@ -56,7 +56,7 @@ def deepthLimitedDFS(start,GoalState,depth,n):
         curr_node = openList.pop(0)
         if curr_node.isGoal(GoalState):
             return curr_node.solution(), len(openList)
-        elif curr_node.depth is not depth:
+        elif curr_node.depth is not depth: #If we didn't reach to the maximum depth we can explore more and discover the children of the current node
                 children = curr_node.discoverChildren(n)
                 openList.extend(children)
 
