@@ -72,7 +72,7 @@ class Vertex:
         return solution
 
     def available_moves(self, x, n): #Function that returnes a list with all the available moves we can do from the current node
-        moves = ['Up', 'Down', 'Left', 'Right']
+        moves = ['Up', 'Down', 'Left', 'Right'] #If several vertexes are formed at the same time (common parent) the vertexes will be arranged in the following order: up, down, left, right.
         if x % n == 0:
             moves.remove('Right')
         if x % n == n - 1:
