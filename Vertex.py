@@ -22,60 +22,10 @@ class Vertex:
         return False
 
 
-    def find_zero(self):
-        self.x = -1
-        self.y = -1
-        for i in range(len(self.mat)):
-            for j in range(len(self.mat)):
-                if self.mat[i, j] == 0:
-                    self.x = i
-                    self.y = j
-        if(self.x==-1 or self.y == -1):
-            raise Exception("The matrix didnt include 0 please check the start state again, Thank you")
-
-
-    def is_up(self):
-        if self.x > 0:
-            return True
-        else:
-            return False
-
-    def is_down(self):
-        if self.x < len(self.mat)-1:
-            return True
-        else:
-            return False
-
-    def is_right(self):
-        if self.y < len(self.mat)-1:
-            return True
-        else:
-            return False
-
-    def is_left(self):
-        if self.y > 0:
-            return True
-        else:
-            return False
-
-
-    def up(self, temp, x, n):
-        temp[x], temp[x - n] = temp[x - n], temp[x]
-
-    def down(self, temp, x, n):
-        temp[x], temp[x + n] = temp[x + n], temp[x]
-
-    def left(self, temp, x, n):
-        temp[x], temp[x - 1] = temp[x - 1], temp[x]
-
-    def right(self, temp, x, n):
-        temp[x], temp[x - 1] = temp[x - 1], temp[x]
-
-
     def print(self):
         print(self.state)
 
-    def discoverChildren(self, n):
+    def discoverChildren(self, n): #returns a list with all the possible children of the current node
         x = self.state.index(0)
         moves = self.available_moves(x, n)
 
@@ -97,18 +47,31 @@ class Vertex:
         return children
 
 
-    def solution(self):
+    def solution(self): #The function returns a list with the route from the initial state to the goal state
         solution = []
-        solution.append(self.direction)
+        if self.direction == 'Up':
+            solution.append('U')
+        elif self.direction == 'Down':
+            solution.append('D')
+        elif self.direction == 'Right':
+            solution.append('R')
+        elif self.direction == 'Left':
+            solution.append('L')
         path = self
-        while path.pai:
+        while path.pai: #the loop will continues until we will reach to the initial state
             path = path.pai
-            solution.append(path.direction)
-        solution = solution[:-1]
+            if path.direction == 'Up':
+                solution.append('U')
+            elif path.direction == 'Down':
+                solution.append('D')
+            elif path.direction == 'Right':
+                solution.append('R')
+            elif path.direction == 'Left':
+                solution.append('L')
         solution.reverse()
         return solution
 
-    def available_moves(self, x, n):
+    def available_moves(self, x, n): #Function that returnes a list with all the available moves we can do from the current node
         moves = ['Up', 'Down', 'Left', 'Right']
         if x % n == 0:
             moves.remove('Right')
@@ -121,7 +84,7 @@ class Vertex:
 
         return moves
 
-    def f(self, n):
+    def f(self, n): #Function that returns the sum between the cost and the manhattan distance between the current node and the goal state
         return self.g() + self.h(n)
 
     def g(self):
@@ -143,29 +106,20 @@ class Vertex:
                     sum += (abs(x_val - x_goal)+abs(y_val - y_goal))
         return sum
 
-    def __lt__(self, other):
-        if self.f(int(np.sqrt(len(self.state)))) == other.f(int(np.sqrt(len(other.state)))):
-            if(self.direction!=None) and (other.direction!=None):
-                if len(self.direction) == len(other.direction):
-                    return self.direction < other.direction
-                else:
-                    return len(self.direction) < len(other.direction)
-            else:
-                return self.f(int(np.sqrt(len(self.state)))) < other.f(int(np.sqrt(len(other.state))))
 
-
-    def generateGoalState(self, n):
+    def generateGoalState(self, n): #Generates Goal State
         GoalState = []
         for x in range(np.power(n, 2)):
             GoalState.append(x + 1)
         GoalState[np.power(n, 2) - 1] = 0
         return GoalState
 
-    def findVal(self, mat, val):
+    def findVal(self, mat, val): #Returns the coordinate of a specific value in the board game
         for x in range(len(mat)):
             for y in range(len(mat)):
                 if mat[x, y] == val:
                     return x, y;
+
 
 
 
