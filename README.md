@@ -1,4 +1,4 @@
-# AI Project - Solving The N-Puzzle Problem 
+# AI Project - N-Puzzle Problem Solver
 
 The goal of this project is to implement a search engine that supports several search algorithms to solve the ***N-Puzzle Problem***.
 Our search engine using informed and uninformed search methods such as: IDS, BFS (uninformed) and AStar (informed).
