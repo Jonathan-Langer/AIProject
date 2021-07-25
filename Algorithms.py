@@ -86,7 +86,7 @@ def aStar(initialState, n):
         for node in children:
             if node not in CloseList:
                 newPotentialCost = curr_node.cost + 1
-            if not isExist(OpenList, node, newPotentialCost, n):
+            if not isExist(OpenList, node, newPotentialCost, n): #if the node doesn't exist in the OpenList, we need to update his cost, his heuristic, his pai (parent), and finally add him to the OpenList
                 node.cost = newPotentialCost
                 node.heuristic = heuristicFunc(node, n)
                 node.pai = curr_node
